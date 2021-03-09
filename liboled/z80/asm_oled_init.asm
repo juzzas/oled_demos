@@ -1,18 +1,9 @@
 SECTION code_user
 
-PUBLIC _oled_init
+PUBLIC asm_oled_init
 
 EXTERN asm_oled_reset
 EXTERN asm_oled_cmd
-
-_oled_init:
-    push bc
-    push hl
-    call asm_oled_init
-    pop hl
-    pop bc
-    ret
-
 
 asm_oled_init:
     call asm_oled_reset

@@ -1,26 +1,26 @@
 SECTION code_user
 
 PUBLIC asm_oled_clear
-DEFC   OLED_BASE = 0x50
+PUBLIC asm_oled_clear_row
 
 EXTERN asm_oled_cmd
 EXTERN asm_oled_data
 
 
 asm_oled_clear:
-    ld a, 0xb0
+    ld a, 0xb0              ; set row 0
     call asm_oled_cmd
     call asm_oled_clear_row
     
-    ld a, 0xb1
+    ld a, 0xb1              ; set row 1
     call asm_oled_cmd
     call asm_oled_clear_row
     
-    ld a, 0xb2
+    ld a, 0xb2              ; set row 2
     call asm_oled_cmd
     call asm_oled_clear_row
     
-    ld a, 0xb3
+    ld a, 0xb3              ; set row 3
     call asm_oled_cmd
     call asm_oled_clear_row
     
@@ -43,3 +43,4 @@ clearloop:
     jr nz, clearloop
     ret
     
+

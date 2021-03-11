@@ -20,7 +20,7 @@ asm_oled_data:
     set 1, b             ; /CS high
     out (c),a            
     
-    nop                  ; long delay
+    nop                  ; short delay
     nop
 
     ret

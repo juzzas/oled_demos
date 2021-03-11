@@ -3,6 +3,10 @@ z80/asm_oled_cmd.asm
 z80/asm_oled_data.asm
 z80/asm_oled_init.asm
 z80/asm_oled_reset.asm
+z80/asm_oled_blit.asm
+z80/asm_oled_blit_init.asm
 
 c/sdcc_iy/oled_clear.asm
 c/sdcc_iy/oled_init.asm
+c/sdcc_iy/oled_blit.asm
+c/sdcc_iy/oled_blit_init.asm

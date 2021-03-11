@@ -22,15 +22,15 @@ LIB_OLED=liboled
 OBJECTS = pixel_test.o main.o 
 
 %.o: %.c $(PRAGMA_FILE)
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) --list -o $@ $<
 
 %.o: %.asm
-	$(AS) $(ASFLAGS) -c -o $@ $<
+	$(AS) $(ASFLAGS) --list -c -o $@ $<
 
 all: $(EXEC)
 
 $(LIB_OLED): liboled/liboled_sdcc_iy.lst
-	$(AS) $(ASFLAGS) -v -x -o $@ @liboled/liboled_sdcc_iy.lst
+	$(AS) $(ASFLAGS) -v -x --list -o $@ @liboled/liboled_sdcc_iy.lst
 
 $(EXEC): $(OBJECTS) $(LIB_OLED)
 	$(CC) $(LDFLAGS) --list -m -subtype=$(SUBTYPE) $(OBJECTS) -lliboled -lm -o $@ -create-app

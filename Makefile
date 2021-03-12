@@ -19,7 +19,7 @@ EXEC=oled
 LIB_OLED=liboled
 
 
-OBJECTS = pixel_test.o main.o 
+OBJECTS = main.o 
 
 %.o: %.c $(PRAGMA_FILE)
 	$(CC) $(CFLAGS) --list -o $@ $<

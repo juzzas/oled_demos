@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "oled.h"
+#include "oled_gfx_font8x8.h"
 
 #include "jskists_sprite.h"
 #include "rc2014_sprite.h"

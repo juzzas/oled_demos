@@ -16,10 +16,12 @@ ASFLAGS=$(TARGET) $(VERBOSITY)
 
 
 EXEC=oled
+EXEC_FONT_DEMO=font_demo
 LIB_OLED=liboled
 
 
 OBJECTS = main.o 
+FONT_DEMO_OBJECTS = font.o
 
 %.o: %.c $(PRAGMA_FILE)
 	$(CC) $(CFLAGS) --list -o $@ $<
@@ -27,13 +29,16 @@ OBJECTS = main.o
 %.o: %.asm
 	$(AS) $(ASFLAGS) --list -c -o $@ $<
 
-all: $(EXEC)
+all: $(EXEC) $(EXEC_FONT_DEMO)
 
 $(LIB_OLED): liboled/liboled_sdcc_iy.lst
 	$(AS) $(ASFLAGS) -v -x --list -o $@ @liboled/liboled_sdcc_iy.lst
 
 $(EXEC): $(OBJECTS) $(LIB_OLED)
 	$(CC) $(LDFLAGS) --list -m -subtype=$(SUBTYPE) $(OBJECTS) -lliboled -lm -o $@ -create-app
+
+$(EXEC_FONT_DEMO): $(FONT_DEMO_OBJECTS) $(LIB_OLED)
+	$(CC) $(LDFLAGS) --list -m -subtype=$(SUBTYPE) $(FONT_DEMO_OBJECTS) -lliboled -lm -o $@ -create-app
 
 .PHONY: clean
 clean:

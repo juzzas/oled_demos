@@ -9,40 +9,47 @@
 #include "oled_font6x8.h"
 #include "oled_font4x8.h"
 
-#include "jskists_sprite.h"
-#include "rc2014_sprite.h"
-#include "quazar_sprite.h"
-
-
-extern void pixel_test(void);
 #define OLED_IMAGE_SIZE  512
 
 static uint8_t L_image_buffer[OLED_IMAGE_SIZE];
 
-//static struct oled_gfx_font8x8_context L_font_context;
 
-
-
-void put_sprite_char(uint8_t *buffer, uint8_t chr, uint8_t row, uint8_t column, uint8_t *font, uint8_t font_width)
+void put_sprite_char_xy(uint8_t *buffer, uint8_t chr, uint8_t x, uint8_t y, uint8_t *font, uint8_t font_width)
 {
-	uint8_t x, y;
+	uint8_t xi, yi;
+	uint16_t span;
+	uint16_t bits, mask;
 	int index;
 	uint8_t *font_index = font + (chr * font_width);
 
-	for (x = column; x < column + font_width; x++)
+	for (xi = x; xi < x + font_width; xi++)
 	{
-		index = (row * 128) + x;
-		buffer[index] = *font_index;
+		index = ((y / 8) * 128) + xi;
+
+		span = buffer[index] | (buffer[index + 128] << 8);
+
+		mask = 0xff << (y % 8);
+
+		bits = (uint8_t)*font_index;
+		bits = bits << (y % 8);
+
+		span &= ~mask;
+		span |= bits;
+
+		buffer[index] = span & 0xff;
+		buffer[index + 128] = (span & 0xff00) >> 8;
+
 		font_index++;
 	}
 }
 
-void put_sprite_string(uint8_t *buffer, char *string, uint8_t row, uint8_t column, uint8_t *font, uint8_t font_width)
+
+void put_sprite_string_xy(uint8_t *buffer, char *string, uint8_t x, uint8_t y, uint8_t *font, uint8_t font_width)
 {
 	while (*string)
 	{
-		put_sprite_char(buffer, *string, row, column, font, font_width);
-		column += font_width;
+		put_sprite_char_xy(buffer, *string, x, y, font, font_width);
+		x += font_width;
 		string++;
 	}
 }
@@ -54,7 +61,7 @@ int main(void)
 	uint8_t *sprite = NULL;
 	uint16_t counter = 0;
 
-	printf("Quazar OLED FONT 8x8 test\r\n");
+	printf("Quazar OLED FONT XY test\r\n");
 	oled_init();
 	printf("Quazar OLED done init\r\n");
 	oled_clear();
@@ -66,16 +73,9 @@ int main(void)
 
 	memset(L_image_buffer, 0xa5, OLED_IMAGE_SIZE);
 
-	put_sprite_string(L_image_buffer, "Hello world!", 1, 16, oled_font8x8_bin, 8);
-	put_sprite_string(L_image_buffer, "Hello world!", 2, 16, oled_font6x8_bin, 6);
-	put_sprite_string(L_image_buffer, "Hello world!", 3, 16, oled_font4x8_bin, 4);
-
-#if 0
-	oled_gfx_font8x8_init(&L_font_context, font_8x8_sam_system);
-	oled_gfx_font8x8_set_xy(&L_font_context, 12, 32);
-	oled_gfx_font8x8_set_rc(&L_font_context, 1, 32);
-#endif
-
+	put_sprite_string_xy(L_image_buffer, "Howdy, twitter-sphere!", 16, 4, oled_font4x8_bin, 4);
+	put_sprite_string_xy(L_image_buffer, "#RC2014", 64, 20, oled_font6x8_bin, 6);
+	put_sprite_string_xy(L_image_buffer, "#QUAZAR", 8, 22, oled_font6x8_bin, 6);
 
 	oled_blit(L_image_buffer);
 

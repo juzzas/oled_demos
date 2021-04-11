@@ -9,18 +9,11 @@
 #include "oled_font6x8.h"
 #include "oled_font4x8.h"
 
-#include "jskists_sprite.h"
-#include "rc2014_sprite.h"
-#include "quazar_sprite.h"
-
 
 extern void pixel_test(void);
 #define OLED_IMAGE_SIZE  512
 
 static uint8_t L_image_buffer[OLED_IMAGE_SIZE];
-
-//static struct oled_gfx_font8x8_context L_font_context;
-
 
 
 void put_sprite_char(uint8_t *buffer, uint8_t chr, uint8_t row, uint8_t column, uint8_t *font, uint8_t font_width)
@@ -69,13 +62,6 @@ int main(void)
 	put_sprite_string(L_image_buffer, "Hello world!", 1, 16, oled_font8x8_bin, 8);
 	put_sprite_string(L_image_buffer, "Hello world!", 2, 16, oled_font6x8_bin, 6);
 	put_sprite_string(L_image_buffer, "Hello world!", 3, 16, oled_font4x8_bin, 4);
-
-#if 0
-	oled_gfx_font8x8_init(&L_font_context, font_8x8_sam_system);
-	oled_gfx_font8x8_set_xy(&L_font_context, 12, 32);
-	oled_gfx_font8x8_set_rc(&L_font_context, 1, 32);
-#endif
-
 
 	oled_blit(L_image_buffer);
 

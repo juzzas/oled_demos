@@ -1,49 +1,37 @@
-CC=zcc
+ZCC=zcc
 AS=zcc
-TARGET=+rc2014
-SUBTYPE=basic
+TARGET=+rc2014 -subtype=hbios
 VERBOSITY=-vn
-
-
 PRAGMA_FILE=zpragma.inc
 
-C_OPT_FLAGS=-SO3 --max-allocs-per-node200000
-
-CFLAGS=$(TARGET) $(VERBOSITY) -c $(C_OPT_FLAGS) -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) -Iliboled/c/include/sdcc
-LDFLAGS=$(TARGET) $(VERBOSITY) -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) 
-ASFLAGS=$(TARGET) $(VERBOSITY)
+C_OPT_FLAGS=-SO2 --max-allocs-per-node100000
+CFLAGS=$(C_OPT_FLAGS) --list -m -compiler sdcc -clib=sdcc_iy -pragma-include:$(PRAGMA_FILE) -Iliboled/c/include/sdcc
 
 LIB_OLED=liboled
 
-
-EXEC_DEMO=oled_demo
-EXEC_FONT_DEMO=font_demo
-EXEC_FONTXY_DEMO=fontxy_demo
-
-DEMO_OBJECTS = demo.o 
+DEMO_OBJECTS = demo.o
 FONT_DEMO_OBJECTS = font.o
 FONTXY_DEMO_OBJECTS = fontxy.o
 
-%.o: %.c $(PRAGMA_FILE)
-	$(CC) $(CFLAGS) --list -o $@ $<
+.PHONY: clean all $(LIB_OLED)
 
-%.o: %.asm
-	$(AS) $(ASFLAGS) --list -c -o $@ $<
-
-all: $(EXEC_DEMO) $(EXEC_FONTXY_DEMO) $(EXEC_FONT_DEMO)
+all: oled_demo font_demo fontxy_demo clock_demo
 
 $(LIB_OLED): liboled/liboled_sdcc_iy.lst
-	$(AS) $(ASFLAGS) -v -x --list -o $@ @liboled/liboled_sdcc_iy.lst
+	$(ZCC) $(TARGET) $(VERBOSITY) -x --list -o $@ @liboled/liboled_sdcc_iy.lst
 
-$(EXEC_DEMO): $(DEMO_OBJECTS) $(LIB_OLED)
-	$(CC) $(LDFLAGS) --list -m -subtype=$(SUBTYPE) $(DEMO_OBJECTS) -lliboled -lm -o $@ -create-app
+oled_demo: $(LIB_OLED) demo.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) demo.c -l$(LIB_OLED) -lm -o $@ -create-app
 
-$(EXEC_FONT_DEMO): $(FONT_DEMO_OBJECTS) $(LIB_OLED)
-	$(CC) $(LDFLAGS) --list -m -subtype=$(SUBTYPE) $(FONT_DEMO_OBJECTS) -lliboled -lm -o $@ -create-app
+font_demo: $(LIB_OLED) font.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) font.c -l$(LIB_OLED) -lm -o $@ -create-app
 
-$(EXEC_FONTXY_DEMO): $(FONTXY_DEMO_OBJECTS) $(LIB_OLED)
-	$(CC) $(LDFLAGS) --list -m -subtype=$(SUBTYPE) $(FONTXY_DEMO_OBJECTS) -lliboled -lm -o $@ -create-app
+fontxy_demo: $(LIB_OLED) fontxy.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontxy.c -l$(LIB_OLED) -lm -o $@ -create-app
 
-.PHONY: clean
+clock_demo: $(LIB_OLED) fontclk.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontclk.c -l$(LIB_OLED) -lm -o $@ -create-app
+
 clean:
 	rm -f *.o *.bin *.tap *.map *.lib *.lis zcc_opt.def *~ /tmp/tmpXX* *.ihx
+

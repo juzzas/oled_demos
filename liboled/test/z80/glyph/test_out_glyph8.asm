@@ -29,10 +29,10 @@ test_out_glyph8:
 SECTION data_user
 
 test_out_glyph8_8:
-        DEFB 81,82,83,84,85,86,87,88
+       DEFB 0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88
 
 test_out_glyph8_4:
-        DEFB 41,42,43,44
+        DEFB 0x41,0x42,0x43,0x44
 
 test_out_glyph8_buffer:
         DEFS BUFFER_SIZE

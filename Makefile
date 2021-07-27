@@ -1,7 +1,8 @@
 ZCC=zcc
 AS=zcc
-TARGET=+rc2014 -subtype=hbios
-VERBOSITY=-vn
+#TARGET=+rc2014 -subtype=hbios
+TARGET=+embedded -startup=0
+VERBOSITY=-v
 PRAGMA_FILE=zpragma.inc
 
 C_OPT_FLAGS=-SO2 --max-allocs-per-node100000
@@ -31,6 +32,9 @@ fontxy_demo: $(LIB_OLED) fontxy.c
 
 clock_demo: $(LIB_OLED) fontclk.c
 	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontclk.c -l$(LIB_OLED) -lm -o $@ -create-app
+
+oled_unittest: $(LIB_OLED)
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) @liboled/test/unittest_z80.lst -l$(LIB_OLED) -o $@ -create_app
 
 clean:
 	rm -f *.o *.bin *.tap *.map *.lib *.lis zcc_opt.def *~ /tmp/tmpXX* *.ihx

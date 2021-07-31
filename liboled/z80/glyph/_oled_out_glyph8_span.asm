@@ -63,7 +63,7 @@ mask_shift_loop:
 
         LD HL, IY
 
-;; load column span of to rows as 16bit value
+;; load column span of two rows as 16bit value
         ; load the data from two rows 16-bit value. LSB is current address, MSB is address + 128
         ; DE = pointer to current pointer
         ;
@@ -72,7 +72,7 @@ mask_shift_loop:
         LD C, A
         LD HL, OLED_WIDTH
         ADD HL, DE
-        LD A, (DE)
+        LD A, (HL)
         LD B, A
         PUSH BC
 

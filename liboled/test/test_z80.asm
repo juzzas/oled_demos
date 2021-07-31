@@ -2,7 +2,6 @@ SECTION code_user
 
 
 PUBLIC _main
-PUBLIC clear_buffer
 PUBLIC test_glyph8
 PUBLIC test_buffer
 
@@ -11,14 +10,24 @@ EXTERN test_out_glyph8_span
 DEFC BUFFER_SIZE=512
 
 _main:
+    LD A, 0
+    CALL memset_buffer
     CALL test_out_glyph8
+
+    LD A, 0
+    CALL memset_buffer
+    CALL test_out_glyph8_span
+
+    LD A, 0xA5
+    CALL memset_buffer
     CALL test_out_glyph8_span
     RET
 
-clear_buffer:
-        LD A, 0
+
+; entry: A= data to set buffer
+memset_buffer:
         LD HL, test_buffer
-        LD (HL), 0x00
+        LD (HL), A
         LD DE, HL
         INC DE
         LD BC, BUFFER_SIZE-1

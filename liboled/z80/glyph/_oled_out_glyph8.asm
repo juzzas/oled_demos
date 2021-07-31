@@ -9,8 +9,13 @@ INCLUDE "../_oled_config.asm"
 ;; entry:
 ;;        DE = destination address
 ;;        HL = source address
-;;        BC = glyph width
+;;        B = glyph width
+;;        C = row_offset (must be 0)
 oled_out_glyph8:
-        LDIR
+        LD A, C  ; swap B and C to allow us to use LDIR
+        LD C, B
+        LD B, A
+
+        LDIR     ; copy data
 
         RET

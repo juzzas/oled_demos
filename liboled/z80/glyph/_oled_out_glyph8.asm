@@ -12,6 +12,10 @@ INCLUDE "../_oled_config.asm"
 ;;        HL = source address
 ;;        B = glyph width
 ;;        C = row_offset
+;;
+;; exit:
+;;        DE = incremented destination address
+
 oled_out_glyph8:
         LD A, C
         OR A

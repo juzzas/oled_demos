@@ -13,6 +13,10 @@ PUBLIC oled_out_glyph8_span
 ;;        HL = source address
 ;;        B = glyph width
 ;;        C = row_offset
+;;
+;; exit:
+;;        DE = incremented destination address
+
 oled_out_glyph8_span:
         ; store destination address
         LD IY, DE
@@ -110,5 +114,7 @@ mask_shift_loop:
         ; loop for next iteration
         POP BC   ; count
         DJNZ glyph_loop
+
+        LD DE, IY
 
         RET

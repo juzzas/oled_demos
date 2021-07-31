@@ -6,6 +6,8 @@ z80/asm_oled_reset.asm
 z80/asm_oled_blit.asm
 z80/asm_oled_blit_init.asm
 
+z80/glyph/asm_oled_glyph8_output.asm
+z80/glyph/oled_glyph8_std_font8.asm
 z80/glyph/_oled_out_glyph8.asm
 z80/glyph/_oled_out_glyph8_span.asm
 

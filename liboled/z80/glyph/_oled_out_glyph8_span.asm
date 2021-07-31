@@ -14,7 +14,7 @@ PUBLIC oled_out_glyph8_span
 ;;        B = glyph width
 ;;        C = row_offset
 oled_out_glyph8_span:
-        ; store definition address
+        ; store destination address
         LD IY, DE
         ; store source address
         LD IX, HL

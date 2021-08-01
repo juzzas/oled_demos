@@ -7,7 +7,7 @@ EXTERN asm_oled_glyph8_output
 ;; entry:
 ;;        A = character
 ;;        DE = destination address
-;;        HL = font base
+;;        IX = font base
 ;;        B = glyph width
 ;;        C = row_offset
 ;;
@@ -17,7 +17,7 @@ EXTERN asm_oled_glyph8_output
 
 asm_oled_glyph8_putc:
         PUSH DE                 ; push destination address
-        PUSH HL                 ; push font base
+        PUSH IX                 ; push font base
         PUSH BC                 ; push width/offset
 
         ; find offset of the first byte of the character in font data (0 based)

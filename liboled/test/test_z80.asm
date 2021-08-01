@@ -7,6 +7,8 @@ PUBLIC test_buffer
 
 EXTERN test_out_glyph8
 EXTERN test_out_glyph8_span
+EXTERN test_out_glyph8_putc
+
 DEFC BUFFER_SIZE=512
 
 _main:
@@ -21,8 +23,12 @@ _main:
     LD A, 0xA5
     CALL memset_buffer
     CALL test_out_glyph8_span
-    RET
 
+    LD A, 0
+    CALL memset_buffer
+    CALL test_out_glyph8_putc
+
+    RET
 
 ; entry: A= data to set buffer
 memset_buffer:

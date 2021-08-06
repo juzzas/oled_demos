@@ -12,20 +12,32 @@
 ; WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 ; COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+;
 
-
-; void oled_blit_init(void);
+;extern void oled_font8_init(struct oled_font8_context *context, uint8_t *buffer, uint8_t *font, uint8_t font_width) __z88dk_callee;
 
 SECTION code_user
 
-PUBLIC _oled_blit_init
+PUBLIC _oled_font8_init
 
-EXTERN asm_oled_blit_init
 
-_oled_blit_init:
-    push bc
-    push hl
-    call asm_oled_blit_init
-    pop hl
-    pop bc
-    ret
+_oled_font8_init:
+        POP AF ; return address
+        POP BC ; arg4 - font_width
+        POP HL ; arg3 - font data
+        POP DE ; arg2 - buffer
+        POP IY ; arg1 - context
+
+        PUSH AF
+
+        ; struct oled_font8_context
+        LD (IY + 0), E
+        LD (IY + 1), D
+        LD (IY + 2), E
+        LD (IY + 3), D
+        LD (IY + 4), 0
+        LD (IY + 5), C
+        LD (IY + 6), L
+        LD (IY + 7), H
+
+        RET

@@ -17,3 +17,5 @@ c/sdcc_iy/oled_clear.asm
 c/sdcc_iy/oled_init.asm
 c/sdcc_iy/oled_blit.asm
 c/sdcc_iy/oled_blit_init.asm
+
+c/sdcc_iy/font/oled_font8_init.asm

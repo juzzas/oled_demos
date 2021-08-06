@@ -38,5 +38,8 @@ mult_width_loop:
 
         POP DE      ; retrieve destination address
 
+        PUSH HL
+        POP IX
+
         JP asm_oled_glyph8_output
 

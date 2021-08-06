@@ -10,7 +10,7 @@ EXTERN test_buffer
 
 test_out_glyph8_span:
         LD DE, test_buffer
-        LD HL, test_glyph8
+        LD IX, test_glyph8
         LD B, 8   ; width
         LD C, 4   ; offset
 

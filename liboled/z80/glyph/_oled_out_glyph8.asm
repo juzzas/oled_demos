@@ -9,12 +9,15 @@ INCLUDE "../_oled_config.asm"
 
 ;; entry:
 ;;        DE = destination address
-;;        HL = source address
+;;        IX = source address
 ;;        B = glyph width
 ;;        C = row_offset
 ;;
 ;; exit:
 ;;        DE = incremented destination address
+;;
+;; Note:
+;;        IY reserved for mask source address
 
 oled_out_glyph8:
         LD A, C
@@ -24,6 +27,9 @@ oled_out_glyph8:
         ; we're on a row boundary, we don't need expensive calculations!
         LD C, B ; swap B and C to allow us to use LDIR
         LD B, A
+
+        PUSH IX ; copy source ptr to HL
+        POP HL
 
         LDIR     ; copy data
 

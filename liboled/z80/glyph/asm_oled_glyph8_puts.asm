@@ -23,9 +23,11 @@ asm_oled_glyph8_puts:
         INC HL
         PUSH HL
         PUSH BC
+        PUSH IX
 
         CALL asm_oled_glyph8_putc
 
+        POP IX
         POP BC
         POP HL
 

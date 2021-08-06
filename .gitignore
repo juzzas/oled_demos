@@ -1,0 +1,9 @@
+/liboled/z80/glyph/*.lis
+/liboled/z80/*.lis
+/liboled/c/sdcc_iy/*.lis
+*.bin
+*.map
+*.lis
+*.xml
+*.lib
+/.ticks_history.txt

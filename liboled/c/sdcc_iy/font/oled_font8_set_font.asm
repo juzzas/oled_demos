@@ -18,10 +18,10 @@
 
 SECTION code_user
 
-PUBLIC _oled_font8_set_font
+PUBLIC _oled_font8_init
 
 
-_oled_font8_set_font:
+_oled_font8_init:
         POP AF ; return address
         POP IY ; arg1 - context
         POP HL ; arg3 - font data

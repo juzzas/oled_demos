@@ -19,3 +19,8 @@ c/sdcc_iy/oled_blit.asm
 c/sdcc_iy/oled_blit_init.asm
 
 c/sdcc_iy/font/oled_font8_init.asm
+c/sdcc_iy/font/oled_font8_set_font.asm
+c/sdcc_iy/font/oled_font8_set_rc.asm
+c/sdcc_iy/font/oled_font8_set_xy.asm
+c/sdcc_iy/font/oled_font8_putc.asm
+c/sdcc_iy/font/oled_font8_puts.asm

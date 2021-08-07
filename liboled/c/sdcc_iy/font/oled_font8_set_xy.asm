@@ -12,27 +12,63 @@
 ; WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 ; COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-;
 
-;extern void oled_font8_init(struct oled_font8_context *context, uint8_t *buffer, uint8_t *font, uint8_t font_width) __z88dk_callee;
+
+; extern void oled_font8_set_rc(struct oled_font8_context *context, uint8_t row, uint8_t column) __z88dk_callee;
+
+DEFC OLED_WIDTH = 128
 
 SECTION code_user
 
-PUBLIC _oled_font8_set_font
+PUBLIC _oled_font8_set_xy
 
 
-_oled_font8_set_font:
+_oled_font8_set_xy:
         POP AF ; return address
         POP IY ; arg1 - context
-        POP HL ; arg3 - font data
-        POP BC ; arg4 - font_width
+        POP BC ; arg2 - co-ordinates (B = Y, C = X)
 
-        PUSH AF
+        PUSH AF ; return address back on stack after clearing
 
         ; struct oled_font8_context
-        LD (IY + 4), 0
-        LD (IY + 5), C
-        LD (IY + 6), L
-        LD (IY + 7), H
+
+        ; put buffer base ptr in HL
+        LD L, (IY + 0)
+        LD H, (IY + 1)
+
+        ; row offset?
+        LD A, B
+        AND 0x07
+        LD (IY + 4), A
+
+        ; find row
+        SRL B
+        SRL B
+        SRL B
+
+        ; add B to HL
+        LD A, B
+
+        ADD A, L    ; A = A+L
+        LD L, A     ; L = A+L
+        ADC A, H    ; A = A+L+H+carry
+        SUB L       ; A = H+carry
+        LD H, A     ; H = H+carry
+
+        ; add 128 for each row
+        LD DE, OLED_WIDTH
+        LD A, C
+
+loop_add:
+        OR A
+        JR Z, skip_add
+
+        ADD HL, DE
+        DEC A
+        JR loop_add
+
+skip_add:
+        LD (IY + 2), L
+        LD (IY + 3), H
 
         RET

@@ -12,27 +12,45 @@
 ; WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 ; COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-;
 
-;extern void oled_font8_init(struct oled_font8_context *context, uint8_t *buffer, uint8_t *font, uint8_t font_width) __z88dk_callee;
+
+; extern void oled_font8_set_rc(struct oled_font8_context *context, uint8_t row, uint8_t column) __z88dk_callee;
 
 SECTION code_user
 
-PUBLIC _oled_font8_set_font
+EXTERN asm_oled_glyph8_putc
 
+PUBLIC _oled_font8_putc
 
-_oled_font8_set_font:
-        POP AF ; return address
-        POP IY ; arg1 - context
-        POP HL ; arg3 - font data
-        POP BC ; arg4 - font_width
+_oled_font8_putc:
+    POP AF ; return address
+    POP IY  ; context
+    POP HL  ; character (in L)
 
-        PUSH AF
+    PUSH AF
+    PUSH IX
 
-        ; struct oled_font8_context
-        LD (IY + 4), 0
-        LD (IY + 5), C
-        LD (IY + 6), L
-        LD (IY + 7), H
+    ; font into IX
+    LD E, (IY+6)
+    LD D, (IY+7)
+    PUSH DE
+    POP IX
 
-        RET
+    ; buffer_ptr into DE
+    LD E, (IY+2)
+    LD D, (IY+3)
+
+    ; row offset
+    LD C, (IY+4)
+
+    ; font width
+    LD B, (IY+5)
+
+    LD A, H
+    call asm_oled_glyph8_putc
+
+    LD (IY+2), E
+    LD (IY+3), D
+
+    POP IX
+    RET

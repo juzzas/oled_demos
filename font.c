@@ -57,9 +57,8 @@ int main(void)
 
 	memset(L_image_buffer, 0xa5, OLED_IMAGE_SIZE);
 
-#ifdef TODO
     oled_font8_set_rc(&L_font_context, 1, 16);
-	oled_font8_puts(&L_font_context, "Hello world!");
+	oled_font8_puts(&L_font_context, "Hi!");
 
     oled_font8_set_font(&L_font_context, oled_font6x8_bin, 6);
 
@@ -70,7 +69,6 @@ int main(void)
 
     oled_font8_set_rc(&L_font_context, 3, 16);
     oled_font8_puts(&L_font_context, "Hello world!");
-#endif
 
 	oled_blit(L_image_buffer);
 

@@ -56,7 +56,10 @@ clock_demo: $(LIB_OLED) fontclk.c
 	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontclk.c -l$(LIB_OLED) -lm -o $@ -create-app
 
 oled_unittest: $(LIB_OLED)
-	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) @liboled/test/unittest_z80.lst -l$(LIB_OLED) -o $@ -create_app
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) @liboled/test/unittest_z80.lst -l$(LIB_OLED) -lm -o $@ -create-app
+
+oled_hello_asm: $(LIB_OLED) hello.asm
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) hello.asm -l$(LIB_OLED) -lm -o $@ -create-app
 
 clean:
 	rm -f *.o *.bin *.tap *.map *.lib *.lis zcc_opt.def *~ /tmp/tmpXX* *.ihx

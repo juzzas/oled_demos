@@ -32,10 +32,6 @@ _oled_font8_set_xy:
 
         ; struct oled_font8_context
 
-        ; put buffer base ptr in HL
-        LD L, (IY + 0)
-        LD H, (IY + 1)
-
         ; row offset?
         LD A, B
         AND 0x07
@@ -46,8 +42,12 @@ _oled_font8_set_xy:
         SRL B
         SRL B
 
-        ; add B to HL
-        LD A, B
+        ; put buffer base ptr in HL
+        LD L, (IY + 0)
+        LD H, (IY + 1)
+
+        ; add C to HL
+        LD A, C
 
         ADD A, L    ; A = A+L
         LD L, A     ; L = A+L
@@ -57,7 +57,7 @@ _oled_font8_set_xy:
 
         ; add 128 for each row
         LD DE, OLED_WIDTH
-        LD A, C
+        LD A, B
 
 loop_add:
         OR A

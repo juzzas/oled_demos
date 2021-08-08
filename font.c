@@ -32,7 +32,6 @@
 #include "oled_font4x8.h"
 
 
-extern void pixel_test(void);
 #define OLED_IMAGE_SIZE  512
 
 static uint8_t L_image_buffer[OLED_IMAGE_SIZE];

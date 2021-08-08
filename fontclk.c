@@ -189,7 +189,7 @@ int main(void)
 
         output_clock(rtc[3], rtc[4], rtc[5], counter & 0x01);
 
-        cpu_delay_ms(500);  // very approximate 50Hz
+        cpu_delay_ms(500);  // very approximate 2Hz
 
         oled_blit(L_image_buffer);
         counter++;

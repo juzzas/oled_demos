@@ -27,14 +27,12 @@
 #include <string.h>
 
 #include "oled.h"
-#include "oled_gfx_font8x8.h"
 
 #include "jskists_sprite.h"
 #include "rc2014_sprite.h"
 #include "quazar_sprite.h"
 
 
-extern void pixel_test(void);
 #define OLED_IMAGE_SIZE  512
 
 static uint8_t L_image_buffer[OLED_IMAGE_SIZE];

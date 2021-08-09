@@ -22,8 +22,8 @@
 
 ZCC=zcc
 AS=zcc
-TARGET=+rc2014 -subtype=hbios
-#TARGET=+embedded -startup=0
+#TARGET=+rc2014 -subtype=hbios
+TARGET=+embedded -startup=0
 VERBOSITY=-v
 PRAGMA_FILE=zpragma.inc
 

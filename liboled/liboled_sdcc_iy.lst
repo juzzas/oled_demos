@@ -7,11 +7,14 @@ z80/asm_oled_blit.asm
 z80/asm_oled_blit_init.asm
 
 z80/glyph/asm_oled_glyph8_output.asm
+z80/glyph/asm_oled_glyph8_output_mask.asm
 z80/glyph/asm_oled_glyph8_putc.asm
 z80/glyph/asm_oled_glyph8_puts.asm
 z80/glyph/oled_glyph8_std_font8.asm
 z80/glyph/_oled_out_glyph8.asm
 z80/glyph/_oled_out_glyph8_span.asm
+z80/glyph/_oled_out_glyph8_mask.asm
+z80/glyph/_oled_out_glyph8_span_mask.asm
 
 c/sdcc_iy/oled_clear.asm
 c/sdcc_iy/oled_init.asm

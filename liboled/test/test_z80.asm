@@ -19,10 +19,14 @@ SECTION code_user
 
 PUBLIC _main
 PUBLIC test_glyph8
+PUBLIC test_glyph4
+PUBLIC test_glyph4_mask
 PUBLIC test_buffer
 
 EXTERN test_out_glyph8
 EXTERN test_out_glyph8_span
+EXTERN test_out_glyph8_mask
+EXTERN test_out_glyph8_span_mask
 EXTERN test_out_glyph8_putc
 EXTERN test_out_glyph8_puts
 
@@ -49,6 +53,14 @@ _main:
     CALL memset_buffer
     CALL test_out_glyph8_puts
 
+    LD A, 0xFF
+    CALL memset_buffer
+    CALL test_out_glyph8_mask
+
+    LD A, 0xFF
+    CALL memset_buffer
+    CALL test_out_glyph8_span_mask
+
     RET
 
 ; entry: A= data to set buffer
@@ -66,6 +78,12 @@ SECTION data_user
 
 test_glyph8:
         DEFB 0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88
+
+test_glyph4:
+        DEFB 0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08
+
+test_glyph4_mask:
+        DEFB 0x0f,0x0f,0x0f,0x0f,0x0f,0x0f,0x0f,0x0f
 
 test_buffer:
         DEFS BUFFER_SIZE

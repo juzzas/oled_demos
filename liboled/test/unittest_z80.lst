@@ -2,5 +2,7 @@ test_z80.asm
 
 z80/glyph/test_out_glyph8.asm
 z80/glyph/test_out_glyph8_span.asm
+z80/glyph/test_out_glyph8_mask.asm
+z80/glyph/test_out_glyph8_span_mask.asm
 z80/glyph/test_out_glyph8_putc.asm
 z80/glyph/test_out_glyph8_puts.asm

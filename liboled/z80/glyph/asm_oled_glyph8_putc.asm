@@ -32,6 +32,8 @@ EXTERN asm_oled_glyph8_output
 
 
 asm_oled_glyph8_putc:
+        PUSH IX                 ; keep font base
+
         PUSH DE                 ; push destination address
         PUSH IX                 ; push font base
         PUSH BC                 ; push width/offset
@@ -57,5 +59,8 @@ mult_width_loop:
         PUSH HL
         POP IX
 
-        JP asm_oled_glyph8_output
+        call asm_oled_glyph8_output
+
+        POP IX  ; restore font base
+        RET
 

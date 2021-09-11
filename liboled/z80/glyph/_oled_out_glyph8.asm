@@ -42,7 +42,7 @@ oled_out_glyph8:
 
         ; we're on a row boundary, we don't need expensive calculations!
         LD C, B ; swap B and C to allow us to use LDIR
-        LD B, A
+        LD B, A ; ld b with 0
 
         PUSH IX ; copy source ptr to HL
         POP HL

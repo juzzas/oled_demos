@@ -38,6 +38,8 @@ struct oled_font8_context
     void *font;
 };
 
+/* standard 8x8 font */
+extern uint8_t oled_font8_std_8x8;
 
 /**
  * Initialise the font8 context structure
@@ -75,7 +77,7 @@ extern void oled_font8_set_rc(struct oled_font8_context *context, uint8_t row, u
 
 extern void oled_font8_set_xy(struct oled_font8_context *context, uint8_t x, uint8_t y) __z88dk_callee;
 
-extern void oled_font8_putc(struct oled_font8_context *context, uint8_t ch)  __z88dk_callee;
+extern void oled_font8_putc(struct oled_font8_context *context, uint16_t ch)  __z88dk_callee;
 extern void oled_font8_puts(struct oled_font8_context *context, const char *str) __z88dk_callee;
 
 #endif //OLED_FONT8X8_H

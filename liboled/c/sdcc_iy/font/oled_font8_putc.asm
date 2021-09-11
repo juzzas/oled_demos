@@ -46,7 +46,7 @@ _oled_font8_putc:
     ; font width
     LD B, (IY+5)
 
-    LD A, H
+    LD A, L
     call asm_oled_glyph8_putc
 
     LD (IY+2), E

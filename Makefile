@@ -43,23 +43,26 @@ all: oled_demo font_demo fontxy_demo clock_demo
 $(LIB_OLED): liboled/liboled_sdcc_iy.lst
 	$(ZCC) $(TARGET) $(VERBOSITY) -x --list -o $@ @liboled/liboled_sdcc_iy.lst
 
-oled_demo: $(LIB_OLED) demo.c
-	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) demo.c -l$(LIB_OLED) -lm -o $@ -create-app
+oled_demo: $(LIB_OLED) oled_demo.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) oled_demo.c -l$(LIB_OLED) -lm -o $@ -create-app
 
-font_demo: $(LIB_OLED) font.c
-	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) font.c -l$(LIB_OLED) -lm -o $@ -create-app
+font_demo: $(LIB_OLED) font_demo.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) font_demo.c -l$(LIB_OLED) -lm -o $@ -create-app
 
-fontxy_demo: $(LIB_OLED) fontxy.c
-	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontxy.c -l$(LIB_OLED) -lm -o $@ -create-app
+fontxy_demo: $(LIB_OLED) fontxy_demo.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontxy_demo.c -l$(LIB_OLED) -lm -o $@ -create-app
 
-clock_demo: $(LIB_OLED) fontclk.c
-	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) fontclk.c -l$(LIB_OLED) -lm -o $@ -create-app
+clock_demo: $(LIB_OLED) clock_demo.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) clock_demo.c -l$(LIB_OLED) -lm -o $@ -create-app
 
 oled_unittest: $(LIB_OLED)
 	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) @liboled/test/unittest_z80.lst -l$(LIB_OLED) -lm -o $@ -create-app
 
-oled_hello_asm: $(LIB_OLED) hello.asm
-	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) hello.asm -l$(LIB_OLED) -lm -o $@ -create-app
+oled_hello: $(LIB_OLED) oled_hello.asm
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) oled_hello.asm -l$(LIB_OLED) -lm -o $@ -create-app
+
+twinkle_demo: $(LIB_OLED) twinkle_demo.c
+	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) twinkle_demo.c -l$(LIB_OLED) -lm -o $@ -create-app
 
 clean:
 	rm -f *.o *.bin *.tap *.map *.lib *.lis zcc_opt.def *~ /tmp/tmpXX* *.ihx

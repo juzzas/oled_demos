@@ -21,6 +21,7 @@ DEFC OLED_WIDTH = 128
 SECTION code_user
 
 PUBLIC _oled_font8_set_xy
+EXTERN asm_oled_y_to_row_offset
 
 
 _oled_font8_set_xy:
@@ -34,19 +35,16 @@ _oled_font8_set_xy:
 
         ; row offset?
         LD A, B
-        AND 0x07
-        LD (IY + 4), A
+        CALL asm_oled_y_to_row_offset
+        LD (IY + 4), L ; store offset
 
-        ; find row
-        SRL B
-        SRL B
-        SRL B
+        ; get row
+        LD B, H
 
         ; put buffer base ptr in HL
         LD L, (IY + 0)
         LD H, (IY + 1)
 
-        ; add C to HL
         LD A, C
 
         ADD A, L    ; A = A+L

@@ -14,32 +14,55 @@
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-SECTION code_user
+PUBLIC asm_oled_sprite_render
+
+INCLUDE "_sprite_context.asm"
+
+;; Entry:
+;;          DE = destination oled back-buffer
+;;          IX = Sprite header context block
+
+asm_oled_sprite_render:
+        LD A, (IX + SPRITE_MASK)
+        OR (IX + SPRITE_MASK + 1)
+        JR NZ, sprite_render_mask
+
+        LD A, (IX + SPRITE_Y)
+        CALL asm_oled_y_to_row_offset
+
+        PUSH HL  ; store row/offset
+
+        LD B, (IX + SPRITE_X)
+        LD C, H
+        EX DE, HL
+        CALL asm_oled_rc_to_addr ; HL holds destination address
+        EX DE, HL   ; DE holds destination address
+
+        POP BC
+        LD B, (IX + SPRITE_W)
+        PUSH IX
+
+        LD L, (IX + SPRITE_DATA)
+        LD H, (IX + SPRITE_DATA+1)
+        PUSH HL
+        POP IX
+
+        LD B, (IX + SPRITE_H)
+        LD HL, OLED_WIDTH
+sprite_row_loop:
+        PUSH DE
+        CALL asm_oled_glyph8_output
+        ; IX should be incremented!
+        POP DE
+        EX HL, DE
+        ADD HL, DE
+        EX HL, DE
 
 
-PUBLIC _main
-PUBLIC test_buffer
-PUBLIC memset_buffer
-
-DEFC BUFFER_SIZE=512
-
-_main:
-        CALL glyph8_main
-        CALL sprite_main
+        DJNZ sprite_row_loop
         RET
 
-; entry: A= data to set buffer
-memset_buffer:
-        LD HL, test_buffer
-        LD (HL), A
-        LD DE, HL
-        INC DE
-        LD BC, BUFFER_SIZE-1
-        LDIR
+
+
+oled_sprite_render_mask:
         RET
-
-
-SECTION data_user
-
-test_buffer:
-        DEFS BUFFER_SIZE

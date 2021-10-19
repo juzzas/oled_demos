@@ -32,6 +32,7 @@ PUBLIC oled_out_glyph8_span
 ;;
 ;; exit:
 ;;        DE = incremented destination address
+;;        IX = incremented source address
 
 oled_out_glyph8_span:
         PUSH DE      ; store destination address in DE'

@@ -33,6 +33,8 @@ PUBLIC oled_out_glyph8_span_mask
 ;;
 ;; exit:
 ;;        DE = incremented destination address
+;;        IX = incremented source address
+;;        IY = incremented mask source address
 
 oled_out_glyph8_span_mask:
         PUSH DE      ; store destination address in DE'

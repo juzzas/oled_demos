@@ -16,30 +16,20 @@
 
 SECTION code_user
 
+DEFC BUFFER_SIZE = 512
 
-PUBLIC _main
-PUBLIC test_buffer
-PUBLIC memset_buffer
+PUBLIC test_render_sprite8
+EXTERN asm_oled_sprite_render
+EXTERN test_glyph8
+EXTERN test_buffer
 
-DEFC BUFFER_SIZE=512
 
-_main:
-        CALL glyph8_main
-        CALL sprite_main
+test_out_glyph8:
+        LD DE, test_buffer
+        LD IX, test_glyph8
+        LD B, 8   ; width
+        LD C, 0   ; offset
+
+        CALL asm_oled_glyph8_output
+
         RET
-
-; entry: A= data to set buffer
-memset_buffer:
-        LD HL, test_buffer
-        LD (HL), A
-        LD DE, HL
-        INC DE
-        LD BC, BUFFER_SIZE-1
-        LDIR
-        RET
-
-
-SECTION data_user
-
-test_buffer:
-        DEFS BUFFER_SIZE

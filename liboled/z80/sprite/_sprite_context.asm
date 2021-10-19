@@ -13,33 +13,12 @@
 ; COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 ; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+DEFC SPRITE_DATA = 0x00
+DEFC SPRITE_MASK = 0x02
+DEFC SPRITE_X = 0x04
+DEFC SPRITE_Y = 0x05
+DEFC SPRITE_H = 0x06
+DEFC SPRITE_W = 0x07
+DEFC SPRITE_HANDLER = 0x08
 
-SECTION code_user
-
-
-PUBLIC _main
-PUBLIC test_buffer
-PUBLIC memset_buffer
-
-DEFC BUFFER_SIZE=512
-
-_main:
-        CALL glyph8_main
-        CALL sprite_main
-        RET
-
-; entry: A= data to set buffer
-memset_buffer:
-        LD HL, test_buffer
-        LD (HL), A
-        LD DE, HL
-        INC DE
-        LD BC, BUFFER_SIZE-1
-        LDIR
-        RET
-
-
-SECTION data_user
-
-test_buffer:
-        DEFS BUFFER_SIZE
+DEFC SPRITE_HEADER_SIZE = 0x0A

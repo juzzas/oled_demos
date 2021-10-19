@@ -15,31 +15,36 @@
 
 
 SECTION code_user
+PUBLIC asm_oled_y_to_row_offset
 
+DEFC OLED_PIXEL_HEIGHT = 32
 
-PUBLIC _main
-PUBLIC test_buffer
-PUBLIC memset_buffer
+;; ENTRY
+;;        A = Y-coordinate
+;;
+;; Note: XY coordinates origin bottom right
+;;
+;; EXIT
+;;        H = row
+;;        L = offset
 
-DEFC BUFFER_SIZE=512
+asm_oled_y_to_row_offset:
+        ; invert Y-axis
+        LD H, A
 
-_main:
-        CALL glyph8_main
-        CALL sprite_main
+        LD A, OLED_PIXEL_HEIGHT
+        SUB H
+
+        LD A, H
+
+        ; find offset
+        AND 0x07
+        LD L, A
+
+        ; find row
+        SRL H
+        SRL H
+        SRL H
+
         RET
 
-; entry: A= data to set buffer
-memset_buffer:
-        LD HL, test_buffer
-        LD (HL), A
-        LD DE, HL
-        INC DE
-        LD BC, BUFFER_SIZE-1
-        LDIR
-        RET
-
-
-SECTION data_user
-
-test_buffer:
-        DEFS BUFFER_SIZE

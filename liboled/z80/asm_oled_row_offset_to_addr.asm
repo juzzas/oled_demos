@@ -15,31 +15,46 @@
 
 
 SECTION code_user
+PUBLIC asm_oled_row_offset_to_addr
 
+DEFC OLED_WIDTH = 128
 
-PUBLIC _main
-PUBLIC test_buffer
-PUBLIC memset_buffer
+;; ENTRY
+;;        B = column
+;;        C = row
+;;       HL = buffer base pointer
+;;
+;; EXIT
+;;       HL = destination
+;;
+;; USES
+;;       DE, A
+;;
+;; RETAINS
+;;       BC
 
-DEFC BUFFER_SIZE=512
+asm_oled_row_offset_to_addr:
+        LD A, B
 
-_main:
-        CALL glyph8_main
-        CALL sprite_main
+        ADD A, L    ; A = A+L
+        LD L, A     ; L = A+L
+        ADC A, H    ; A = A+L+H+carry
+        SUB L       ; A = H+carry
+        LD H, A     ; H = H+carry
+
+        ; do we need to add any rows?
+        LD A, C
+        OR A
+        JR Z, skip_add
+
+        ; add 128 for each row
+        LD DE, OLED_WIDTH
+
+loop_add:
+        ADD HL, DE
+        DEC A
+        OR A
+        JR NZ, loop_add
+
+skip_add:
         RET
-
-; entry: A= data to set buffer
-memset_buffer:
-        LD HL, test_buffer
-        LD (HL), A
-        LD DE, HL
-        INC DE
-        LD BC, BUFFER_SIZE-1
-        LDIR
-        RET
-
-
-SECTION data_user
-
-test_buffer:
-        DEFS BUFFER_SIZE

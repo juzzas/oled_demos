@@ -47,39 +47,40 @@ uint8_t oled_buffer[512];
 #endif
 
 void main(void) {
-  uint16_t bdos_addr = z80_wpeek(0x0006);
-  uint16_t driver_pages = ((driver_code_size / 256) + 1);
+    uint16_t bdos_addr = z80_wpeek(0x0006);
+    uint16_t driver_pages = ((driver_code_size / 256) + 1);
 
-  load_addr = (bdos_addr - (driver_pages << 8)) & 0xff00;
+    load_addr = (bdos_addr - (driver_pages << 8)) & 0xff00;
 
 #ifdef DEBUG
-  printf("driver code = 0x%04x (%u bytes)\n", driver_code, driver_code_size);
-  printf("reloc info = 0x%04x (%u words)\n", reloc_info, reloc_info_size);
-  printf("bdos = 0x%04x\n", bdos_addr);
-  printf("pages needed = %u\n", driver_pages);
-  printf("load_addr = 0x%04x\n", load_addr);
+    printf("driver code = 0x%04x (%u bytes)\n", driver_code, driver_code_size);
+    printf("reloc info = 0x%04x (%u words)\n", reloc_info, reloc_info_size);
+    printf("bdos = 0x%04x\n", bdos_addr);
+    printf("pages needed = %u\n", driver_pages);
+    printf("load_addr = 0x%04x\n", load_addr);
 #endif
 
-  memcpy((uint8_t*)load_addr, driver_code, driver_code_size);
+    memcpy((uint8_t*)load_addr, driver_code, driver_code_size);
 
-  for (int i = 0; i < reloc_info_size; i++) {
-    uint16_t addr = z80_wpeek((load_addr + reloc_info[i]));
+    /* patch 16bit address using offsets found in reloc_info */
+    for (int i = 0; i < reloc_info_size; i++) {
+        uint16_t addr = z80_wpeek((load_addr + reloc_info[i]));
 #ifdef DEBUG
-    printf("patching 0x%04x: 0x%04x > 0x%04x\n", reloc_info[i], addr, addr + load_addr);
+        printf("patching 0x%04x: 0x%04x > 0x%04x\n", reloc_info[i], addr, addr + load_addr);
 #endif
-    z80_wpoke(load_addr + reloc_info[i], addr + load_addr);
-  }
+        z80_wpoke(load_addr + reloc_info[i], addr + load_addr);
+    }
 
-  driver_code_init(load_addr);
+    driver_code_init(load_addr);
 
 #ifdef DEBUG
-  printf("new bdos = 0x%04x\n", z80_wpeek(0x0006));
+    printf("new bdos = 0x%04x\n", z80_wpeek(0x0006));
 
-  memset(oled_buffer, 0xa5, 512);
-  cpm_bdos(0xe0, (int)oled_buffer);
+    memset(oled_buffer, 0xa5, 512);
+    cpm_bdos(0xe0, (int)oled_buffer);
 #else
-  cpm_bdos(0xe0, 0); // clear oled display
+    cpm_bdos(0xe0, 0); // clear oled display
 #endif
 
-  puts("Quazar OLED RSX installed");
+    puts("Quazar OLED RSX installed");
 }

@@ -26,7 +26,7 @@
 #include <arch/cpm.h>
 #include <z80.h>
 
-//#define DEBUG 
+//#define DEBUG
 
 #pragma output REGISTER_SP = 16384
 
@@ -47,8 +47,6 @@ uint8_t oled_buffer[512];
 #endif
 
 void main(void) {
-  puts("Quazar OLED RSX loader - @jskists");
-
   uint16_t bdos_addr = z80_wpeek(0x0006);
   uint16_t driver_pages = ((driver_code_size / 256) + 1);
 
@@ -79,9 +77,9 @@ void main(void) {
 
   memset(oled_buffer, 0xa5, 512);
   cpm_bdos(0xe0, (int)oled_buffer);
-#endif
-
+#else
   cpm_bdos(0xe0, 0); // clear oled display
+#endif
 
   puts("Quazar OLED RSX installed");
 }

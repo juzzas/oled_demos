@@ -22,7 +22,8 @@
 
 ZCC=zcc
 AS=zcc
-TARGET=+rc2014 -subtype=hbios
+#TARGET=+rc2014 -subtype=hbios
+TARGET=+rc2014 -subtype=cpm
 #TARGET=+embedded -startup=0
 VERBOSITY=-v
 PRAGMA_FILE=zpragma.inc
@@ -36,7 +37,7 @@ DEMO_OBJECTS = demo.o
 FONT_DEMO_OBJECTS = font.o
 FONTXY_DEMO_OBJECTS = fontxy.o
 
-.PHONY: clean all $(LIB_OLED)
+.PHONY: clean all $(LIB_OLED) oledrsx
 
 all: oled_demo font_demo fontxy_demo clock_demo
 
@@ -63,6 +64,10 @@ oled_hello: $(LIB_OLED) oled_hello.asm
 
 twinkle_demo: $(LIB_OLED) twinkle_demo.c
 	$(ZCC) $(TARGET) $(VERBOSITY) $(CFLAGS) twinkle_demo.c -l$(LIB_OLED) -lm -o $@ -create-app
+
+oledrsx:
+	z88dk-z80asm -v -b -reloc-info -l -s -m -g -ooledrsx_driver.bin @oledrsx/oledrsx_driver.lst
+	${ZCC} ${TARGET} $(VERBOSITY) $(CFLAGS) @oledrsx/oledrsx.lst -ooledrsx.com -create-app
 
 clean:
 	rm -f *.o *.bin *.tap *.map *.lib *.lis zcc_opt.def *~ /tmp/tmpXX* *.ihx

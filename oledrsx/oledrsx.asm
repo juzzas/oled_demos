@@ -11,22 +11,29 @@
 ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 ; WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 ; COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+; OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-PUBLIC bdos_handler
-PUBLIC old_bdos
-EXTERN asm_oled_blit
+EXTERN asm_oled_init
 EXTERN asm_oled_clear
+EXTERN asm_oled_blit_init
 
-old_bdos:
-    DEFS 3
+serial:   defb 0,0,0,0,0,0
+start:    jp bdos_handler  ; start of program
+next:     defb 0xc3        ; jump instruction to
+          defw 0           ; next module in line
+prev:     defw 0           ; previous module
+remove:   defb 0           ; remove flag (0xff = remove)
+nonbank:  defb 0           ; nonbank flag
+name:     defb '123456713' ; any 8-character name
+loader:   defb 0           ; loader flag
+          defb 0,0         ; reserved area
 
 
 bdos_handler:
     ld a, c
     cp 0xe0
     jr z, handle_bdos_oled_blit
-    jp old_bdos
+    jp next
 
 
 

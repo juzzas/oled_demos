@@ -15,7 +15,10 @@
 
 EXTERN asm_oled_init
 EXTERN asm_oled_clear
+EXTERN asm_oled_blit
 EXTERN asm_oled_blit_init
+
+    ORG 0x100
 
 serial:   defb 0,0,0,0,0,0
 start:    jp bdos_handler  ; start of program
@@ -24,7 +27,7 @@ next:     defb 0xc3        ; jump instruction to
 prev:     defw 0           ; previous module
 remove:   defb 0           ; remove flag (0xff = remove)
 nonbank:  defb 0           ; nonbank flag
-name:     defb '123456713' ; any 8-character name
+name:     defm "OLEDRSX "  ; any 8-character name
 loader:   defb 0           ; loader flag
           defb 0,0         ; reserved area
 
@@ -40,6 +43,22 @@ bdos_handler:
 ; entry: de = address of 512 byte image to blit
 ;             if 0, then clear screen
 handle_bdos_oled_blit:
+    ld a,(flag_initialised)
+    or a
+    jr nz, init_done
+    push bc
+    push de
+    push hl
+    call asm_oled_init
+    call asm_oled_blit_init
+    pop hl
+    pop de
+    pop bc
+
+    ld a, 0xff  ; mark as initialised
+    ld (flag_initialised), a
+
+init_done:
     ld a, d
     or e
     jr nz, not_oled_clear
@@ -54,6 +73,7 @@ not_oled_clear:
     pop hl
     ret
 
-
+flag_initialised:
+    defb 0
 
 

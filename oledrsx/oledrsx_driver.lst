@@ -1,5 +1,4 @@
-oledrsx_main.asm
-oledrsx_bdos.asm
+oledrsx_driver.asm
 liboled/z80/asm_oled_blit.asm
 liboled/z80/asm_oled_blit_init.asm
 liboled/z80/asm_oled_clear.asm

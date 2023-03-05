@@ -43,7 +43,9 @@ handle_bdos_oled_blit:
     ld a, d
     or e
     jr nz, not_oled_clear
-    jp asm_oled_clear
+    call asm_oled_clear
+    call asm_oled_blit_init
+    ret
 
 not_oled_clear:
     push hl

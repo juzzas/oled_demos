@@ -26,7 +26,7 @@
 #include <arch/cpm.h>
 #include <z80.h>
 
-//#define DEBUG
+#define DEBUG
 
 #pragma output REGISTER_SP = 16384
 

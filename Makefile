@@ -37,7 +37,7 @@ DEMO_OBJECTS = demo.o
 FONT_DEMO_OBJECTS = font.o
 FONTXY_DEMO_OBJECTS = fontxy.o
 
-.PHONY: clean all $(LIB_OLED) oledrsx
+.PHONY: clean all $(LIB_OLED) oledrsx oledxmas
 
 all: oled_demo font_demo fontxy_demo clock_demo
 
@@ -68,6 +68,9 @@ twinkle_demo: $(LIB_OLED) twinkle_demo.c
 oledrsx:
 	z88dk-z80asm -v -b -reloc-info -l -s -m -g -ooledrsx_driver.bin @oledrsx/oledrsx_driver.lst
 	${ZCC} ${TARGET} $(VERBOSITY) $(CFLAGS) @oledrsx/oledrsx.lst -ooledrsx.com -create-app
+
+oledxmas:
+	${ZCC} ${TARGET} $(VERBOSITY) $(CFLAGS) @oledxmas/oledxmas.lst -l$(LIB_OLED) -ooledxmas.com -create-app
 
 clean:
 	rm -f *.o *.bin *.tap *.map *.lib *.lis zcc_opt.def *~ /tmp/tmpXX* *.ihx
